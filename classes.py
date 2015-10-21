@@ -26,3 +26,5 @@ class Item:
 
 	def xoreval(item):
 		return evaluate(item.left) ^ evaluate(item.right)
+
+
