@@ -1,0 +1,12 @@
+A + B => Z
+C + D => Y
+
+E | F => X
+G | H => W
+
+Z ^ X => V
+K ^ L => U
+
+=ABC E JK
+
+?ZYXWVU
