@@ -6,54 +6,62 @@ import sys, classes, collections
 
 ################################################################################
 
-def andeval(item):
-	if (bool(evaluate(item.left)) and bool(evaluate(item.right)):
-		return (1)
-	else:
-		return (-1)
+UNDEFINED = -1
+FALSE = 0
+TRUE = 1
 
-def oreval(item):
-	if (bool(evaluate(item.left)) or bool(evaluate(item.right)):
-		return (1)
-	else:
-		return (-1)
+################################################################################
 
-def xoreval(item):
-	if (bool(evaluate(item.left)) ^ bool(evaluate(item.right)):
-		return (1)
-	else:
-		return (-1)
+def expert_system(fd):
 
-def evaluate(item):
-	if (item.value != 0):
-		return (item.value)
-	elif (item.symbol == '+'):
-		return(andeval(item))
-	elif (item.symbol == '|'):
-		return(oreval(item))
-	elif (item.symbol == '^'):
-		return(xoreval(item))
+ # Initialize dictionnary
+	items = {}
+	for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+		items[letter] = UNDEFINED
+
+ # Process input
+	for line in fd:
+		line = ''.join(line.split())
+		if line == '':
+			pass
+
+		elif line.startswith('='):
+			for letter in line[1:]:
+				if ()
+
+		elif line.startswith('?'):
+			for letter in line[1:]:
+				if letter not in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+					print()
+				else
+					items[letter].evaluate(items)
+
+		else:
+			
 
 
 ################################################################################
 
 def main():
-	
-	#fill items here
-	items = fakeitemfiller()
-	queries = 'ABC'
-	for i in len(queries):
-		if (evaluate(items[queries[i]]) == 1):
-			print(queries[i], ' is TRUE')
-		else:
-			print(queries[i], ' is FALSE')
+
+	if len(sys.argv) == 1:
+		expert_system(sys.stdin)
+	else:
+		for argv in sys.argv:
+			try:
+				fd = open(argv)
+				expert_system(fd)
+				fd.close()
+			except FileNotFoundError as e:
+				print('{}: {}'.format(sys.argv[0], e.what))
 
 ################################################################################
 
 if __name__ == "__main__":
+
 	try:
 		main()
 	except (KeyboardInterrupt):
-		print('nah')
+		print('\u0443\u043A\u0430')
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////////////////////////////#
