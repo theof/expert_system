@@ -129,7 +129,96 @@ A+S=>P+L+M
 =QWAS
 ?PLM
 """
-]]
+]],
+	"INC" :[[
+		"basic",
+		"TTTT\n",
+"""B=>C
+E=>F
+D=>E
+F=>G
+G=>H
+C=>D
+A=>B
+=A
+?EFGH
+"""
+	],[
+		"deeper",
+		"TTTTTTTTTTTTTTTTTTTTTTTTTT\n",
+"""Z=>Y
+Y=>X
+X=>W
+W=>V
+V=>U
+U=>T
+T=>S
+S=>R
+R=>Q
+Q=>P
+P=>O
+O=>N
+N=>M
+M=>L
+L=>K
+K=>J
+J=>I
+I=>H
+H=>G
+G=>F
+F=>E
+E=>D
+D=>C
+C=>B
+B=>A
+A=>Z
+=A
+?ABCDEFGHIJKLMNOPQRSTUVWXYZ
+"""
+	],[
+		"mixed",
+		"TFTFTFTFTFTFTFTFTFTFTFTFTF\n",
+"""!(Y)=>X
+!(C)=>B
+!(J)=>I
+!(P)=>O
+!(U)=>T
+!(X)=>W
+!(T)=>S
+!(W)=>V
+!(R)=>Q
+!(Z)=>Y
+!(N)=>M
+!(S)=>R
+!(K)=>J
+!(M)=>L
+!(O)=>N
+!(H)=>G
+!(E)=>D
+!(Q)=>P
+!(L)=>K
+!(V)=>U
+!(D)=>C
+!(I)=>H
+!(G)=>F
+!(A)=>Z
+!(F)=>E
+!(B)=>A
+=A
+?ABCDEFGHIJKLMNOPQRSTUVWXYZ
+"""
+	]],
+		"MIX":
+		[[
+			"basic",
+			"TTT\n",
+"""P^(!(A|S)+D|(!(F)+G))=>L
+!(Q)^(W+!(E|R)^!(T+Y))|U|(I+O)=>P
+!(L^P)^(Z+(X+(C+(V+(B+N)))))=>M
+=QWRYIADFGZXCVB
+?PLM
+"""
+	]]
 }
 
 #TESTS["NOTHING"] =

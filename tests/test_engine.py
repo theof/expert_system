@@ -41,7 +41,7 @@ def test_one(name, test, break_on_fail, keep_tests, verbose):
 		if result != answer:
 			print '\033[91m' + "FAIL" + '\033[0m'
 			if verbose:
-				print "\n"+query+"\n\nexpected: "+repr(answer)+"\nreturned: "+repr(returned)+"\n\n--------------------\n\n"
+				print "\n"+query+"\n\nexpected: "+repr(answer)+"\nreturned: "+repr(result)+"\n\n--------------------\n\n"
 			if break_on_fail:
 				exit(0)
 		else:
