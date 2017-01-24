@@ -1,25 +1,15 @@
-#! /usr/bin/python
+#!/usr/bin/env python3
 import sys
-sys.path.append("sources")
-from main import expert_system
+from lexer import Lexer, Token
+from parser import Parser
+from interpreter import Interpreter
 
-def main(argv):
-	i = 1
-	display = 0
-	while i < len(argv) and argv[i][0] == '-':
-		display += argv[i].count('v')
-		i += 1
-	if i >= len(argv):
-		print "ES ERROR : At least one file required."
-		print "Usage : ES.py [-vv] file"
-		exit(0);
-	try :
-		file = open(argv[i], "r")
-	except IOError:
-		print("ES ERROR : Invalid file given : {}.".format(argv[i]))
-	else:
-		with file:
-			expert_system(file, display)
+def expert_system(file):
+	lexer = Lexer(file)
+	parser = Parser(lexer)
+	interpreter = Interpreter(parser)
+	interpreter.interpret()
 
-if (__name__ == "__main__"):
-	main(sys.argv)
+if __name__ == '__main__':
+	with open(sys.argv[1], 'r') as fd:
+		expert_system(fd.read())
