@@ -1,0 +1,46 @@
+negation ->
+expr_value 			True			False
+	\/
+
+	True			.false			.true
+
+	False           .true			.false
+
+
+if (negation is False and expr_value is True) or
+	(negation is True and expr_value is False):
+	.true
+else:
+	.false
+
+
+
+
+
+if negation != expr_value:
+	.true
+else:
+	.false
+
+
+
+
+init() -> 				
+
+eval([]) -> A
+
+eval(A) -> B
+
+B - A -> C
+
+>>C
+
+
+
+
+
+
+final = new - old
+
+for x in old:
+	new.remove(x)

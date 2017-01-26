@@ -13,12 +13,12 @@ class Token(object):
 class Lexer(object):
 
 	def __init__(self, file):
-		self.file = file
+		self.file = self.cleaner(file)
 		self.pos = 0
 		self.current_char = self.file[self.pos]
 
 	def error(self):
-		raise Exception('ES : Invalid character.')
+		raise Exception('ES : Invalid character : {}.'.format(repr(self.current_char)))
 
 	def advance(self):
 		self.pos += 1
@@ -33,10 +33,6 @@ class Lexer(object):
 			return None
 		else:
 			return self.file[peek_pos]
-
-	def skip_whitespace(self):
-		while self.current_char is not None and self.current_char in '\t ':
-			self.advance()
 
 	def get_sign_token(self):
 		return {
@@ -54,10 +50,12 @@ class Lexer(object):
 	def get_next_token(self):
 	
 		while self.current_char is not None:
-			if self.current_char in '\t ':
-				self.skip_whitespace()
-				continue
 			
+			if self.current_char == '#':
+				while self.current_char != '\n':
+					self.advance()
+				continue
+
 			if self.current_char == '=' and self.peek() == '>':
 				self.advance()
 				self.advance()
@@ -76,4 +74,8 @@ class Lexer(object):
 			self.error()
 		return Token('EOF', None)
 
+	def cleaner(self, raw):
+		for c in string.whitespace.replace('\n', ''):
+			raw = raw.replace(c, '')
+		return raw
 

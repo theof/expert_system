@@ -1,3 +1,4 @@
+import string, pprint
 MAX_DEPTH = 50
 
 class NodeVisitor(object):
@@ -11,13 +12,23 @@ class NodeVisitor(object):
 		raise Exception('ES : No visit_{} method.'.format(type(node).__name__))
 
 
-
 class Interpreter(NodeVisitor):
 
 	def __init__(self, parser):
 		self.parser = parser
-		self.true = []
-		self.false = []
+		self.expr_value = None
+		self.fact_values = {x:[] for x in string.ascii_uppercase}
+
+	def print_fact_values(self, target=False, true_only=True):
+		if not target:
+			target = self.fact_values
+		for k,v in target.items():
+
+			if len(v) and not true_only:
+				print("'{}' : {}".format(k,all(v)))
+			elif len(v) and all(v):
+				print("'{}'".format(k))
+
 
 	def visit_Expression(self, node):
 		# print('visit_Expression')
@@ -50,18 +61,16 @@ class Interpreter(NodeVisitor):
 	def visit_ParenExpr(self, node):
 		# print('visit_ParenExpr')
 		if isinstance(node.left, str):
-			self.dependences += node.left
-			return node.left in self.true and node.left not in self.false
+			return all(self.fact_values[node.left]) and len(self.fact_values[node.left])
 		else:
 			return self.visit(node.left)
 
 	def visit_AndConclusion(self, node):
 		# print('visit_AndConclusion')
-		self.updates = node.right
-		if node.negation:
-			self.false.append(node.right)
+		if node.negation != self.expr_value:
+			self.fact_values[node.right].append(True)
 		else:
-			self.true.append(node.right)
+			self.fact_values[node.right].append(False)
 	
 	def visit_Conclusion(self, node):
 		# print('visit_Conclusion')
@@ -70,50 +79,44 @@ class Interpreter(NodeVisitor):
 			self.visit(node.right)
 
 	def visit_Rule(self, node):
-		self.dependences = ''
-		self.outcomes = ''
-		self.visit(node.expression)
+		self.expr_value = self.visit(node.expression)
 		self.visit(node.conclusion)
-		return [self.dependences, self.outcomes, node, True]
 
-	def eval(self, node):
-		lines = []
-		for rule in node.rules:
-			lines.append(self.visit(rule))
-		self.dependences = [x[0] for x in lines]
-		self.outcomes = [x[1] for x in lines]
+	def set_initial_facts(self):
+		for initial_fact in self.node.initial_facts:
+			self.fact_values[initial_fact].append(True)
 
-		self.true = []
-		self.false = []
-		for fact in node.initial_facts:
-			self.true.append(fact)
-		deepness = 0
-		while True in [x[3] for x in lines] and deepness < MAX_DEPTH:
-			deepness += 1
-			for line in lines:
-				if line[3] and all([True if fact not in self.outcomes else False for fact in line[0]]):
-					if self.visit(line[2].expression):
-						self.visit(line[2].conclusion)
-						line[3] = False
-						for fact in line[1]:
-							self.dependences.replace(fact, '')
-		for line in lines:
-			if line[3]:
-				if self.visit(line[2].expression):
-					self.visit(line[2].conclusion)
+	def eval(self):
+		for i in range(0, MAX_DEPTH):
+			# init
+			self.set_initial_facts()
+			# old
+			for rule in self.node.rules:
+				self.visit(rule)
+			# new
+			old_values = self.fact_values
+			for rule in self.node.rules:
+				self.visit(rule)
+			# final = (new - old) + init
+			for key, new_values in self.fact_values.items() :
+				for old in old_values[key]:
+					new_values.remove(old)
+			self.set_initial_facts()
 
 	def visit_System(self, node):
 		# print('visit_System')
-		self.eval(node)
+		self.eval()
 
 		for query in node.queries:
-			if query in self.true and query not in self.false:
+			# print(query, ':', self.fact_values[query])
+			if all(self.fact_values[query]) and len(self.fact_values[query]):
 				print(query, ': True')
 			else:
 				print(query, ': False')
-
+		
 	def interpret(self):
-		self.visit(self.parser.parse())
+		self.node = self.parser.parse()
+		self.visit(self.node)
 
 
 

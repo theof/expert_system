@@ -83,6 +83,8 @@ FACT + L_PAREN FACT ^ FACT R_PAREN | FACT
 A=>B+!C+!!D
 
 AND_CONCL(B) + CONCL(!C+!!D)
+AND_CONCL(B) + AND_CONCL(C, False) + AND_CONCL(!D, False)
+AND_CONCL(B) + AND_CONCL(C, False) + AND_CONCL(AND_CONCL(D, False), False)
 
 
 

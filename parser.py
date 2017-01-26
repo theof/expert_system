@@ -63,6 +63,10 @@ class Parser(object):
 		else:
 			self.error(token_type)
 
+	def skip_newlines(self):
+		while self.current_token.type == 'NEWLINE':
+			self.eat('NEWLINE')
+
 	def and_conclusion(self):
 		# print('and_conclusion')
 		if self.current_token.type == 'NOT':
@@ -127,6 +131,7 @@ class Parser(object):
 
 	def rule(self):
 		# print('rule')
+		self.skip_newlines()
 		expression = self.expression()
 		self.eat('IMPLICATION')
 		conclusion = self.conclusion()
@@ -139,9 +144,11 @@ class Parser(object):
 		initial_facts = []
 		queries = []
 		
+		self.skip_newlines()
 		while self.current_token.type in ['FACT', 'L_PAREN', 'NOT']:
 			rules.append(self.rule())
 		
+		self.skip_newlines()
 		if self.current_token.type == 'EQUAL':
 			self.eat('EQUAL')
 			while self.current_token.type == 'FACT':
@@ -149,13 +156,14 @@ class Parser(object):
 				self.eat('FACT')
 			self.eat('NEWLINE')
 
+		self.skip_newlines()
 		if self.current_token.type == 'QUERY':
 			self.eat('QUERY')
 			while self.current_token.type == 'FACT':
 				queries.append(self.current_token.value)
 				self.eat('FACT')
-			self.eat('NEWLINE')
 
+		self.skip_newlines()
 		self.eat('EOF')
 		return System(rules, initial_facts, queries)
 
