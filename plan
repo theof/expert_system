@@ -1,0 +1,26 @@
+parse
+
+deconstruct
+
+build
+interpret
+display
+read input
+goto1
+
+
+class Nat:
+	
+
+	eval()
+		return
+
+
+class Rule:
+	Rule	parentA
+	Rule	parentB
+	Rule	result
+	str 	operation
+
+	eval()
+		return parentA.eval() operation parentB.eval()
